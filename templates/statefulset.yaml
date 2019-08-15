@@ -1,0 +1,109 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "artemis.fullname" . }}
+spec:
+  selector:
+    matchLabels:
+{{ include "artemis.labels" . | indent 6 }}
+  serviceName: {{ include "artemis.fullname" . }}
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+    {{- if .Values.metrics.enabled }}
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9404"
+    {{- end }}
+      labels:
+{{ include "artemis.labels" . | indent 8 }}
+    spec:
+      containers:
+      - name: activemq-artemis
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy}}
+        ports:
+        - containerPort: 61617
+          name: netty
+        - containerPort: 7800
+          name: jgroups
+        {{- if .Values.metrics.enabled }}
+        - containerPort: 9404
+          name: prometheus
+        {{- end }}
+        env:
+          - name: JAVA_OPTS
+            value: {{ .Values.javaOpts }}    
+          - name: ARTEMIS_USERNAME
+            value: {{ .Values.auth.clientUser }}
+          - name: ARTEMIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "artemis.fullname" . }}
+                key: clientPassword
+          - name: BROKER_CONFIG_CLUSTER_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "artemis.fullname" . }}
+                key: clusterPassword
+          - name: ENABLE_JMX_EXPORTER
+            value: {{ .Values.metrics.enabled }}
+        {{- if .Values.containerSecurityContext }}
+        securityContext:
+{{ toYaml .Values.containerSecurityContext | indent 10 }}
+        {{- end }}
+        volumeMounts:
+        - name: config
+          mountPath: /var/lib/artemis/etc-override
+        - name: data
+          mountPath: /var/lib/artemis/data
+  {{- if .Values.podSecurityContext }}
+      securityContext:
+{{ toYaml .Values.podSecurityContext | indent 8 }}
+  {{- end }}
+  volumes:
+  - name: config
+    configMap:
+      name: {{ include "artemis.fullname" . }}
+      items:
+      {{- if .Values.ha.enabled }}
+        - key: broker-ha-live.xml
+          value: broker-00.xml
+        - key: ha-live.xml
+          value: ha-live.xml
+      {{- else }}
+        - key: broker.xml
+          value: broker-00.xml
+      {{- end }}
+        - key: addresses.xml
+          value: addresses.xml
+        - key: address-settings.xml
+          value: address-settings.xml
+        - key: broadcast.xml
+          value: broadcast.xml
+        - key: clustering.xml
+          value: clustering.xml
+        - key: connectors.xml
+          value: connectors.xml
+        - key: discovery.xml
+          value: discovery.xml
+        - key: jgroups.xml
+          value: jgroups.xml
+  {{- if not .Values.persistence.enabled }}
+  - name: data
+    empty: {}
+  {{- else }}
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes:
+{{ toYaml .Values.persistence.accessModes | indent 8 }}
+      {{- if .Values.persistence.storageClassName }}
+      storageClassName: {{ .Values.persistence.storageClassName }}
+      {{- end }}
+      resources:
+        requests:
+          storage: {{ .Values.persistence.storageSize }}
+{{- end }}

@@ -7,38 +7,121 @@ metadata:
 data:
   broker.xml: |
     <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-    <configuration xmlns="urn:activemq" xmlns:xi="http://www.w3.org/2001/XInclude">
-      <core xmlns="urn:activemq:core">
-        <acceptors>
-          <acceptor name="netty">tcp://0.0.0.0:61617</acceptor>
-        </acceptor>
-       
-        <connectors>
-          <connector name="netty">tcp://0.0.0.0:61617</connector>
-        </connectors>
+    <configuration xmlns="urn:activemq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd">
+      <core xmlns="urn:activemq:core" xsi:schemaLocation="urn:activemq:core ">
+        
+        <xi:include href="connectors.xml"/>
 
-        <broadcast-group name="jgroups-kube-ping">
-          <jgroups-file>jgroups-kube-ping.xml</jgroups-file>
-          <jgroups-channel>activemq_broadcast_channel</jgroups-channel>
-          <broadcast-period>2000</broadcast-period>
-          <connector-ref>netty</connector-ref>
-        </broadcast-group>
+        <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
+        <xi:include href="clustering.xml" />
 
-        <discovery-groups>
-          <discovery-group name="jgroups-kube-ping">
-              <jgroups-file>jgroups-kube-ping.xml</jgroups-file>
-              <jgroups-channel>activemq_broadcast_channel</jgroups-channel>
-              <refresh-timeout>10000</refresh-timeout>
-          </discovery-group>
-        </discovery-groups>
+        <xi:include href="broadcast.xml"/>
+        <xi:include href="discovery.xml"/>
 
         <xi:include href="addresses.xml"/>
         <xi:include href="address-settings.xml" />
+
+        {{- range $key, $value := .Values.core }}
+        <{{ kebabcase $key }}>{{ $value }}</{{ kebabcase $key }}>
+        {{- end }}
       </core>
     </configuration>
 
-  jgroups-kube-ping: |
-    TODO
+  broker-ha-live.xml: |
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+    <configuration xmlns="urn:activemq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd">
+      <core xmlns="urn:activemq:core" xsi:schemaLocation="urn:activemq:core ">
+        
+        <xi:include href="connectors.xml"/>
+
+        <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
+        <xi:include href="clustering.xml" />
+
+        <xi:include href="broadcast.xml"/>
+        <xi:include href="discovery.xml"/>
+
+        <xi:include href="addresses.xml"/>
+        <xi:include href="address-settings.xml" />
+
+        <xi:include href="ha-live.xml" />
+
+        {{- range $key, $value := .Values.core }}
+        <{{ kebabcase $key }}>{{ $value }}</{{ kebabcase $key }}>
+        {{- end }}
+      </core>
+    </configuration>
+
+  broker-ha-backup.xml: |
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+    <configuration xmlns="urn:activemq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd">
+      <core xmlns="urn:activemq:core" xsi:schemaLocation="urn:activemq:core ">
+        
+        <xi:include href="connectors.xml"/>
+
+        <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
+        <xi:include href="clustering.xml" />
+
+        <xi:include href="broadcast.xml"/>
+        <xi:include href="discovery.xml"/>
+
+        <xi:include href="addresses.xml"/>
+        <xi:include href="address-settings.xml" />
+
+        <xi:include href="ha-backup.xml" />
+
+        {{- range $key, $value := .Values.core }}
+        <{{ kebabcase $key }}>{{ $value }}</{{ kebabcase $key }}>
+        {{- end }}
+      </core>
+    </configuration>
+ 
+  connectors.xml: |
+    <connectors xmlns="urn:activemq:core">
+      <connector name="netty">tcp://0.0.0.0:61617</connector>
+    </connectors>
+
+  clustering.xml: |
+    <cluster-connections xmlns="urn:activemq:core">
+      <cluster-connection name={{ include "artemis.fullname" . }}>
+        <address>{{ .Values.clustering.addresses | join "," }}</address>
+        <connector-ref>netty</connector-ref>
+        <discovery-group-ref>jgroups</discovery-group-ref>
+        {{- range $key, $value := (omit .Values.clustering "address" "addresses" "connector-ref" "discovery-group-ref") }}
+        <{{ kebabcase $key }}>{{ $value }}</{{ kebabcase $key }}>
+        {{- end }}
+      </cluster-connection>
+    </cluster-connections>
+
+  broadcast.xml: |
+    <broadcast-groups xmlns="urn:activemq:core">
+      <broadcast-group name="jgroups">
+        <jgroups-file>jgroups.xml</jgroups-file>
+        <jgroups-channel>activemq_broadcast_channel</jgroups-channel>
+        <broadcast-period>2000</broadcast-period>
+        <connector-ref>netty</connector-ref>
+      </broadcast-group>
+    </broadcast-groups>
+
+  discovery.xml: |
+    <discovery-groups  xmlns="urn:activemq:core" >
+      <discovery-group name="jgroups">
+          <jgroups-file>jgroups.xml</jgroups-file>
+          <jgroups-channel>activemq_broadcast_channel</jgroups-channel>
+          <refresh-timeout>10000</refresh-timeout>
+      </discovery-group>
+    </discovery-groups>
+
+  jgroups.xml: |
+    <TCP 
+      bind_port="7800"
+      thread_pool.min_threads="{{ .Values.replicaCount }}"
+    />
+  
+    <org.jgroups.protocols.kubernetes.KUBE_PING
+      port_range="1"
+      namespace="{{ .Release.Namespace }}"
+      labels="app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/name={{ include "artemis.name" . }}"
+    />
 
   addresses.xml: |
     <addresses xmlns="urn:activemq:core">
@@ -68,10 +151,33 @@ data:
     {{- range .Values.addressSettings }}
        <address-setting match="{{ required "match is mandatory for each addressSetting" .match }}">
        {{- range $key, $value := .settings }}
-        <{{ $key }}>{{ $value }}</{{ $key }}>
+        <{{ kebabcase $key }}>{{ $value }}</{{ kebabcase $key }}>
        {{- end }}
        </address-setting>
     {{- end }}
     </address-settings>
 
- 
+  ha-live.xml: |
+    <ha-policy xmlns="urn:activemq:core">
+      <replication>
+          <master>
+            <check-for-live-server>{{ .Values.ha.failBack }}</check-for-live-server>
+            {{- range $key, $value := (omit .Values.ha.live "check-for-live-server" "checkForLiveServer") }}
+            <{{ kebabcase $key }}>{{ $value }}</{{ kebabcase $key }}>
+            {{- end }}
+          </master>
+      </replication>
+    </ha-policy>
+
+  ha-backup.xml: |
+    <ha-policy xmlns="urn:activemq:core">
+      <replication>
+          <slave>
+            <allow-failback>{{ .Values.ha.failBack }}</allow-failback>
+            {{- range $key, $value := (omit .Values.ha.backup "allow-failback" "allowFailback") }}
+            <{{ kebabcase $key }}>{{ $value }}</{{ kebabcase $key }}>
+            {{- end }}
+          </slave>
+      </replication>
+    </ha-policy>
+

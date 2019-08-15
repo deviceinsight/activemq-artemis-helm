@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args:  ['{{ include "artemis.fullname" . }}:{{ .Values.service.port }}']
+      args:  ['{{ include "artemis.fullname" . }}:8080']
   restartPolicy: Never

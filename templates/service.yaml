@@ -5,12 +5,12 @@ metadata:
   labels:
 {{ include "artemis.labels" . | indent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: None
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
+    - port: 61617
+      targetPort: netty
       protocol: TCP
-      name: http
+      name: netty
   selector:
     app.kubernetes.io/name: {{ include "artemis.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
