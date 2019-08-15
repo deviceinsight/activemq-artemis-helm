@@ -5,7 +5,7 @@ metadata:
   labels:
 {{ include "artemis.labels" . | indent 4 }}
 spec:
-  type: None
+  clusterIP: None
   ports:
     - port: 61617
       targetPort: netty

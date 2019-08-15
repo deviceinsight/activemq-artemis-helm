@@ -7,19 +7,21 @@ metadata:
 data:
   broker.xml: |
     <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-    <configuration xmlns="urn:activemq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd">
+    <configuration xmlns="urn:activemq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd" xmlns:xi="http://www.w3.org/2001/XInclude">
       <core xmlns="urn:activemq:core" xsi:schemaLocation="urn:activemq:core ">
         
-        <xi:include href="connectors.xml"/>
+        <xi:include href="../etc-override/connectors.xml"/>
+
+        <!--
+        <xi:include href="../etc-override/addresses.xml"/>
+        <xi:include href="../etc-override/address-settings.xml" />
+        -->
 
         <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
-        <xi:include href="clustering.xml" />
+        <xi:include href="../etc-override/clustering.xml" />
 
-        <xi:include href="broadcast.xml"/>
-        <xi:include href="discovery.xml"/>
-
-        <xi:include href="addresses.xml"/>
-        <xi:include href="address-settings.xml" />
+        <xi:include href="../etc-override/broadcast.xml"/>
+        <xi:include href="../etc-override/discovery.xml"/>
 
         {{- range $key, $value := .Values.core }}
         <{{ kebabcase $key }}>{{ $value }}</{{ kebabcase $key }}>
@@ -32,18 +34,18 @@ data:
     <configuration xmlns="urn:activemq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd">
       <core xmlns="urn:activemq:core" xsi:schemaLocation="urn:activemq:core ">
         
-        <xi:include href="connectors.xml"/>
+        <xi:include href="../etc-override/connectors.xml"/>
 
         <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
-        <xi:include href="clustering.xml" />
+        <xi:include href="../etc-override/clustering.xml" />
 
-        <xi:include href="broadcast.xml"/>
-        <xi:include href="discovery.xml"/>
+        <xi:include href="../etc-override/broadcast.xml"/>
+        <xi:include href="../etc-override/discovery.xml"/>
 
-        <xi:include href="addresses.xml"/>
-        <xi:include href="address-settings.xml" />
+        <xi:include href="../etc-override/addresses.xml"/>
+        <xi:include href="../etc-override/address-settings.xml" />
 
-        <xi:include href="ha-live.xml" />
+        <xi:include href="../etc-override/ha-live.xml" />
 
         {{- range $key, $value := .Values.core }}
         <{{ kebabcase $key }}>{{ $value }}</{{ kebabcase $key }}>
@@ -56,25 +58,25 @@ data:
     <configuration xmlns="urn:activemq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd">
       <core xmlns="urn:activemq:core" xsi:schemaLocation="urn:activemq:core ">
         
-        <xi:include href="connectors.xml"/>
+        <xi:include href="../etc-override/connectors.xml"/>
 
         <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
-        <xi:include href="clustering.xml" />
+        <xi:include href="../etc-override/clustering.xml" />
 
-        <xi:include href="broadcast.xml"/>
-        <xi:include href="discovery.xml"/>
+        <xi:include href="../etc-override/broadcast.xml"/>
+        <xi:include href="../etc-override/discovery.xml"/>
 
-        <xi:include href="addresses.xml"/>
-        <xi:include href="address-settings.xml" />
+        <xi:include href="../etc-override/addresses.xml"/>
+        <xi:include href="../etc-override/address-settings.xml" />
 
-        <xi:include href="ha-backup.xml" />
+        <xi:include href="../etc-override/ha-backup.xml" />
 
         {{- range $key, $value := .Values.core }}
         <{{ kebabcase $key }}>{{ $value }}</{{ kebabcase $key }}>
         {{- end }}
       </core>
     </configuration>
- 
+
   connectors.xml: |
     <connectors xmlns="urn:activemq:core">
       <connector name="netty">tcp://0.0.0.0:61617</connector>
@@ -82,30 +84,31 @@ data:
 
   clustering.xml: |
     <cluster-connections xmlns="urn:activemq:core">
-      <cluster-connection name={{ include "artemis.fullname" . }}>
+      <cluster-connection name="{{ include "artemis.fullname" . }}">
         <address>{{ .Values.clustering.addresses | join "," }}</address>
         <connector-ref>netty</connector-ref>
-        <discovery-group-ref>jgroups</discovery-group-ref>
+        <discovery-group-ref discovery-group-name="jgroups-discovery" />
+        <!--
         {{- range $key, $value := (omit .Values.clustering "address" "addresses" "connector-ref" "discovery-group-ref") }}
         <{{ kebabcase $key }}>{{ $value }}</{{ kebabcase $key }}>
         {{- end }}
+        -->
       </cluster-connection>
     </cluster-connections>
 
   broadcast.xml: |
     <broadcast-groups xmlns="urn:activemq:core">
-      <broadcast-group name="jgroups">
-        <jgroups-file>jgroups.xml</jgroups-file>
+      <broadcast-group name="jgroups-broadcast">
+        <jgroups-file>../etc-override/jgroups.xml</jgroups-file>
         <jgroups-channel>activemq_broadcast_channel</jgroups-channel>
-        <broadcast-period>2000</broadcast-period>
         <connector-ref>netty</connector-ref>
       </broadcast-group>
     </broadcast-groups>
 
   discovery.xml: |
     <discovery-groups  xmlns="urn:activemq:core" >
-      <discovery-group name="jgroups">
-          <jgroups-file>jgroups.xml</jgroups-file>
+      <discovery-group name="jgroups-discovery">
+          <jgroups-file>../etc-override/jgroups.xml</jgroups-file>
           <jgroups-channel>activemq_broadcast_channel</jgroups-channel>
           <refresh-timeout>10000</refresh-timeout>
       </discovery-group>
@@ -118,7 +121,7 @@ data:
     />
   
     <org.jgroups.protocols.kubernetes.KUBE_PING
-      port_range="1"
+      port_range="0"
       namespace="{{ .Release.Namespace }}"
       labels="app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/name={{ include "artemis.name" . }}"
     />
@@ -179,5 +182,4 @@ data:
             {{- end }}
           </slave>
       </replication>
-    </ha-policy>
-
+    </ha-policy> 
