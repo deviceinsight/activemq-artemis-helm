@@ -71,6 +71,8 @@ spec:
           mountPath: /var/lib/artemis/data
         - name: etc-override
           mountPath: /var/lib/artemis/etc-override
+        - name: jgroups
+          mountPath: /var/lib/artemis/etc/jgroups
   {{- if .Values.podSecurityContext }}
       securityContext:
 {{ toYaml .Values.podSecurityContext | indent 8 }}
@@ -78,34 +80,39 @@ spec:
       volumes:
       - name: etc-override
         empty: {}
+      - name: jgroups
+        configMap:
+          name: {{ include "artemis.fullname" . }}
+          items:
+          - key: jgroups-discovery.xml
+            path: jgroups-discovery.xml
       - name: config
         configMap:
           name: {{ include "artemis.fullname" . }}
           items:
           {{- if .Values.ha.enabled }}
-            - key: broker-ha-live.xml
-              path: broker-00.xml
-            - key: ha-live.xml
-              path: ha-live.xml
+          - key: broker-ha-live.xml
+            path: broker-00.xml
+          - key: ha-live.xml
+            path: ha-live.xml
           {{- else }}
-            - key: broker.xml
-              path: broker-00.xml
+          - key: broker.xml
+            path: broker-00.xml
           {{- end }}
-            - key: addresses.xml
-              path: addresses.xml
-            - key: address-settings.xml
-              path: address-settings.xml
-            - key: broadcast.xml
-              path: broadcast.xml
-            - key: clustering.xml
-              path: clustering.xml
-            - key: connectors.xml
-              path: connectors.xml
-            - key: discovery.xml
-              path: discovery.xml
-            - key: jgroups.xml
-              path: jgroups.xml
-      {{- if not .Values.persistence.enabled }}
+          - key: addresses.xml
+            path: addresses.xml
+          - key: address-settings.xml
+            path: address-settings.xml
+          - key: broadcast.xml
+            path: broadcast.xml
+          - key: clustering.xml
+            path: clustering.xml
+          - key: connectors.xml
+            path: connectors.xml
+          - key: discovery.xml
+            path: discovery.xml
+
+     {{- if not .Values.persistence.enabled }}
       - name: data
         empty: {}
       {{- else }}

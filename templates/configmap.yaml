@@ -16,7 +16,7 @@ data:
         <xi:include href="../etc-override/addresses.xml"/>
         <xi:include href="../etc-override/address-settings.xml" />
         -->
-
+        
         <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
         <xi:include href="../etc-override/clustering.xml" />
 
@@ -99,7 +99,7 @@ data:
   broadcast.xml: |
     <broadcast-groups xmlns="urn:activemq:core">
       <broadcast-group name="jgroups-broadcast">
-        <jgroups-file>../etc-override/jgroups.xml</jgroups-file>
+        <jgroups-file>jgroups/jgroups-discovery.xml</jgroups-file>
         <jgroups-channel>activemq_broadcast_channel</jgroups-channel>
         <connector-ref>netty</connector-ref>
       </broadcast-group>
@@ -108,23 +108,27 @@ data:
   discovery.xml: |
     <discovery-groups  xmlns="urn:activemq:core" >
       <discovery-group name="jgroups-discovery">
-          <jgroups-file>../etc-override/jgroups.xml</jgroups-file>
+          <jgroups-file>jgroups/jgroups-discovery.xml</jgroups-file>
           <jgroups-channel>activemq_broadcast_channel</jgroups-channel>
           <refresh-timeout>10000</refresh-timeout>
       </discovery-group>
     </discovery-groups>
 
-  jgroups.xml: |
-    <TCP 
-      bind_port="7800"
-      thread_pool.min_threads="{{ .Values.replicaCount }}"
-    />
-  
-    <org.jgroups.protocols.kubernetes.KUBE_PING
-      port_range="0"
-      namespace="{{ .Release.Namespace }}"
-      labels="app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/name={{ include "artemis.name" . }}"
-    />
+  jgroups-discovery.xml: |
+    <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="urn:org:jgroups"
+        xsi:schemaLocation="urn:org:jgroups http://www.jgroups.org/schema/jgroups.xsd">
+    
+      <TCP 
+        bind_port="7800"
+        thread_pool.min_threads="{{ .Values.replicaCount }}"
+      />
+    
+      <org.jgroups.protocols.kubernetes.KUBE_PING
+        namespace="{{ .Release.Namespace }}"
+        labels="app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/name={{ include "artemis.name" . }}"
+      />
+    </config>
 
   addresses.xml: |
     <addresses xmlns="urn:activemq:core">
