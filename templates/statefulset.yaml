@@ -21,12 +21,12 @@ spec:
     spec:
       initContainers:
       - name: copy-broker-config
-        image: busybox:1.31
-        command: 
-          - bin/sh
+        image: bash:5
+        command:
+          - bash
         args:
           - -c
-          - cp /tmp/config/*.xml /tmp/etc-override/
+          - cp /tmp/config/*.{xml,xslt} /tmp/etc-override/
         volumeMounts:
         - name: config
           mountPath: /tmp/config
@@ -39,6 +39,12 @@ spec:
         ports:
         - containerPort: 61617
           name: netty
+        - containerPort: 5672
+          name: amq
+        - containerPort: 61613
+          name: stomp
+        - containerPort: 1883
+          name: mqtt
         - containerPort: 7800
           name: jgroups
         {{- if .Values.metrics.enabled }}
@@ -111,6 +117,8 @@ spec:
             path: connectors.xml
           - key: discovery.xml
             path: discovery.xml
+          - key: broker-00.xslt
+            path: broker-00.xslt
 
      {{- if not .Values.persistence.enabled }}
       - name: data
@@ -121,7 +129,7 @@ spec:
           name: data
         spec:
           accessModes:
-    {{ toYaml .Values.persistence.accessModes | indent 8 }}
+{{ toYaml .Values.persistence.accessModes | indent 8 }}
           {{- if .Values.persistence.storageClassName }}
           storageClassName: {{ .Values.persistence.storageClassName }}
           {{- end }}

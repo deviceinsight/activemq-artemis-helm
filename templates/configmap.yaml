@@ -12,10 +12,9 @@ data:
         
         <xi:include href="../etc-override/connectors.xml"/>
 
-        <!--
+
         <xi:include href="../etc-override/addresses.xml"/>
         <xi:include href="../etc-override/address-settings.xml" />
-        -->
         
         <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
         <xi:include href="../etc-override/clustering.xml" />
@@ -79,7 +78,7 @@ data:
 
   connectors.xml: |
     <connectors xmlns="urn:activemq:core">
-      <connector name="netty">tcp://0.0.0.0:61617</connector>
+      <connector name="netty">tcp://0.0.0.0:61616</connector>
     </connectors>
 
   clustering.xml: |
@@ -87,12 +86,10 @@ data:
       <cluster-connection name="{{ include "artemis.fullname" . }}">
         <address>{{ .Values.clustering.addresses | join "," }}</address>
         <connector-ref>netty</connector-ref>
-        <discovery-group-ref discovery-group-name="jgroups-discovery" />
-        <!--
         {{- range $key, $value := (omit .Values.clustering "address" "addresses" "connector-ref" "discovery-group-ref") }}
         <{{ kebabcase $key }}>{{ $value }}</{{ kebabcase $key }}>
         {{- end }}
-        -->
+        <discovery-group-ref discovery-group-name="jgroups-discovery" />
       </cluster-connection>
     </cluster-connections>
 
@@ -122,11 +119,17 @@ data:
       <TCP 
         bind_port="7800"
         thread_pool.min_threads="{{ .Values.replicaCount }}"
+        {{- range $key, $value := .Values.jgroups.tcp }}
+        {{ $key }}={{ $value | quote }}
+        {{- end }}
       />
     
       <org.jgroups.protocols.kubernetes.KUBE_PING
         namespace="{{ .Release.Namespace }}"
         labels="app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/name={{ include "artemis.name" . }}"
+        {{- range $key, $value := .Values.jgroups.k8s }}
+        {{ $key }}={{ $value | quote }}
+        {{- end }}
       />
     </config>
 
@@ -186,4 +189,18 @@ data:
             {{- end }}
           </slave>
       </replication>
-    </ha-policy> 
+    </ha-policy>
+
+  broker-00.xslt:
+    <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+      <xsl:output omit-xml-declaration="yes"/>
+
+      <xsl:template match="node()|@*">
+        <xsl:copy>
+         <xsl:apply-templates select="node()|@*"/>
+        </xsl:copy>
+      </xsl:template>
+
+      <xsl:template match="*[local-name()='addresses']|*[local-name()='address-settings']"/>
+    </xsl:stylesheet>

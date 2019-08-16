@@ -30,32 +30,46 @@ auth:
   clientUser: artemis
   clusterUser: artemis-internal
 
+jgroups:
+  # jgroups.k8s additional settings for the k8s ping of jgroups. Key, Values are automatically expanded.
+  k8s: {}
+  # jgroups.tcp additional settings for the k8s ping of jgroups. Key, Values are automatically expanded.
+  tcp: {}
+
+
 ## clustering settings, see: https://activemq.apache.org/components/artemis/documentation/latest/clusters.html for reference. 
 ## All key-value pairs are automatically expanded in the cluster-connections xml
 clustering:
   ## clustering.addresses prefix of addresses to include in clustering
   addresses: []
-  ## clustering.retry-interval interval (in milliseconds) between retry attempts, after connection failures between nodes
-  retryInterval: "500"
-  ## clustering.retry-interval-multiplier multiplier (in milliseconds) used to increase the retry-interval after each reconnect attempt, default is 1.
-  retrIintervalMultiplier: "1.5"
-  ## clustering.max-retry-interval maximum delay (in milliseconds) for retries
-  maxRetryInterval: "5000"
+  ## clustering.useDuplicateDetection filter out duplicate messages
+  useDuplicateDetection: true
 
 ha:
   ## ha.enabled if `true` a second stateful set running backups will be installed 
   enabled: false
   ## ha.failBack if `true` switch back from backup to live, when live becomes available again
   failBack: false
-  ## ha.live settings for live servers. Automatically expanded
+  ## ha.live settings for live servers. Key, values are automatically expanded
   live: {}
-  ## ha.backup settings for backup servers. Automatically expanded
+  ## ha.backup settings for backup servers. Key, values are automatically expanded
   backup: {}
 
-## core additional core settings. Automatically expanded
+## core additional core settings. Key, values are automatically expanded
 core:
   ## core.criticalAnalyzerPolicy how to behave on critical errors detected, see https://activemq.apache.org/components/artemis/documentation/latest/critical-analysis.html
   criticalAnalyzerPolicy: SHUTDOWN
+
+addresses:
+  - name: DLQ
+  - name: ExpiryQueue
+
+addressSettings:
+  - match: "#"
+    settings:
+      dead-letter-address: DLQ
+      expiry-address: ExpiryQueue
+      message-counter-history-day-limit: 10
 
 ## podSecurityContext allows setting security context for the pod: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 # podSecurityContext:

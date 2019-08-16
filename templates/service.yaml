@@ -7,10 +7,20 @@ metadata:
 spec:
   clusterIP: None
   ports:
-    - port: 61617
+    - port: 61616
       targetPort: netty
       protocol: TCP
       name: netty
+    - port: 5672
+      targetPort: amqp
+      name: amqp
+    - port: 61613
+      targetPort: stomp
+      name: stomp
+    - port: 1883
+      targetPort: mqtt
+      name: mqtt
+
   selector:
     app.kubernetes.io/name: {{ include "artemis.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
