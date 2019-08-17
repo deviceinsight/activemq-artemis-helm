@@ -21,6 +21,18 @@ persistence:
   accessModes:
     - ReadWriteOnce
   storageSize: 8Gi
+
+livenessProbe:
+  httpGet:
+    port: http
+  initialDelaySeconds: 120
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 10
   
 metrics:
   ## metrics.enabled if `true` export prometheus metrics
