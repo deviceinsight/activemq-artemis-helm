@@ -36,7 +36,6 @@ jgroups:
   # jgroups.tcp additional settings for the k8s ping of jgroups. Key, Values are automatically expanded.
   tcp: {}
 
-
 ## clustering settings, see: https://activemq.apache.org/components/artemis/documentation/latest/clusters.html for reference. 
 ## All key-value pairs are automatically expanded in the cluster-connections xml
 clustering:

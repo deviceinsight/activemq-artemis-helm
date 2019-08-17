@@ -30,7 +30,7 @@ data:
 
   broker-ha-live.xml: |
     <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-    <configuration xmlns="urn:activemq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd">
+    <configuration xmlns="urn:activemq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd" xmlns:xi="http://www.w3.org/2001/XInclude">
       <core xmlns="urn:activemq:core" xsi:schemaLocation="urn:activemq:core ">
         
         <xi:include href="../etc-override/connectors.xml"/>
@@ -54,7 +54,7 @@ data:
 
   broker-ha-backup.xml: |
     <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-    <configuration xmlns="urn:activemq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd">
+    <configuration xmlns="urn:activemq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd" xmlns:xi="http://www.w3.org/2001/XInclude">
       <core xmlns="urn:activemq:core" xsi:schemaLocation="urn:activemq:core ">
         
         <xi:include href="../etc-override/connectors.xml"/>
@@ -115,8 +115,10 @@ data:
     <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="urn:org:jgroups"
         xsi:schemaLocation="urn:org:jgroups http://www.jgroups.org/schema/jgroups.xsd">
-    
-      <TCP 
+
+      <TCP
+        external_addr="match-interface:eth0"
+        bind_addr="match-interface:eth0"
         bind_port="7800"
         thread_pool.min_threads="{{ .Values.replicaCount }}"
         {{- range $key, $value := .Values.jgroups.tcp }}
@@ -125,12 +127,40 @@ data:
       />
     
       <org.jgroups.protocols.kubernetes.KUBE_PING
+        masterProtocol="https"
         namespace="{{ .Release.Namespace }}"
         labels="app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/name={{ include "artemis.name" . }}"
         {{- range $key, $value := .Values.jgroups.k8s }}
         {{ $key }}={{ $value | quote }}
         {{- end }}
       />
+
+      <MERGE3 max_interval="30000" min_interval="10000"/>
+      <FD_SOCK start_port="9000"/>
+      <FD_ALL timeout="30000" interval="5000"/>
+      <VERIFY_SUSPECT timeout="1500"/>
+      <BARRIER />
+      <pbcast.NAKACK2 
+        xmit_interval="500"
+        xmit_table_num_rows="100"
+        xmit_table_msgs_per_row="2000"
+        xmit_table_max_compaction_time="30000"
+        use_mcast_xmit="false"
+        discard_delivered_msgs="true" />
+      <UNICAST3 
+        xmit_table_num_rows="100"
+        xmit_table_msgs_per_row="1000"
+        xmit_table_max_compaction_time="30000"/>
+      <pbcast.STABLE 
+        stability_delay="1000" 
+        desired_avg_gossip="50000"
+        max_bytes="8m"/>
+      <pbcast.GMS print_local_addr="true" join_timeout="3000"/>
+      <MFC max_credits="2M" min_threshold="0.4"/>
+      <FRAG2 frag_size="60K"/>
+      <pbcast.STATE_TRANSFER/>
+      <CENTRAL_LOCK />
+      <COUNTER/>
     </config>
 
   addresses.xml: |

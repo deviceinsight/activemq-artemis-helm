@@ -47,6 +47,8 @@ spec:
           name: mqtt
         - containerPort: 7800
           name: jgroups
+        - containerPort: 8888
+          name: kubeping
         {{- if .Values.metrics.enabled }}
         - containerPort: 9404
           name: prometheus
@@ -79,10 +81,11 @@ spec:
           mountPath: /var/lib/artemis/etc-override
         - name: jgroups
           mountPath: /var/lib/artemis/etc/jgroups
-  {{- if .Values.podSecurityContext }}
+      serviceAccount: {{ include "artemis.fullname" . }}
+      {{- if .Values.podSecurityContext }}
       securityContext:
 {{ toYaml .Values.podSecurityContext | indent 8 }}
-  {{- end }}
+      {{- end }}
       volumes:
       - name: etc-override
         empty: {}
