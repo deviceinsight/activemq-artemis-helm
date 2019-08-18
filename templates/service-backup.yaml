@@ -1,11 +1,13 @@
+{{- if .Values.ha.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "artemis.fullname" . }}
+  name: {{ include "artemis.fullname" . }}-backup
   labels:
-{{ include "artemis.labels.live" . | indent 4 }}
+{{ include "artemis.labels.backup" . | indent 4 }}
 spec:
   clusterIP: None
+  publishNotReadyAddresses: true
   ports:
     - port: 61616
       targetPort: netty
@@ -20,10 +22,8 @@ spec:
     - port: 1883
       targetPort: mqtt
       name: mqtt
-
   selector:
     app.kubernetes.io/name: {{ include "artemis.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    {{- if .Values.ha.enabled }}
-    app.kubernetes.io/ha: live
-    {{- end }}
+    app.kubernetes.io/ha: backup
+{{- end }}

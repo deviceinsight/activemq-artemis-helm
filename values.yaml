@@ -22,15 +22,15 @@ persistence:
     - ReadWriteOnce
   storageSize: 8Gi
 
-livenessProbe:
-  httpGet:
-    port: http
-  initialDelaySeconds: 120
-  periodSeconds: 10
+# livenessProbe: 
+  # httpGet:
+  #   port: http
+  # initialDelaySeconds: 120
+  # periodSeconds: 10
 
 readinessProbe:
-  httpGet:
-    port: http
+  tcpSocket:
+    port: netty
   initialDelaySeconds: 5
   periodSeconds: 10
   

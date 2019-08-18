@@ -1,12 +1,13 @@
 ---
+{{- if .Values.ha.enabled }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "artemis.fullname" . }}
+  name: {{ include "artemis.fullname" . }}-backup
 spec:
   selector:
     matchLabels:
-{{ include "artemis.labels.live" . | indent 6 }}
+{{ include "artemis.labels.backup" . | indent 6 }}
   serviceName: {{ include "artemis.fullname" . }}
   replicas: {{ .Values.replicaCount }}
   template:
@@ -17,14 +18,15 @@ spec:
         prometheus.io/port: "9404"
     {{- end }}
       labels:
-{{ include "artemis.labels.live" . | indent 8 }}
+{{ include "artemis.labels.backup" . | indent 8 }}
 {{ include "artemis.statefulset.spec" . | indent 4 }}
           {{- if .Values.ha.enabled }}
-          - key: broker-ha-live.xml
+          - key: broker-ha-backup.xml
             path: broker-00.xml
-          - key: ha-live.xml
-            path: ha-live.xml
+          - key: ha-backup.xml
+            path: ha-backup.xml
           {{- else }}
           - key: broker.xml
             path: broker-00.xml
           {{- end }}
+{{- end }}
