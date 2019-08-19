@@ -128,7 +128,7 @@ data:
       <org.jgroups.protocols.kubernetes.KUBE_PING
         masterProtocol="https"
         namespace="{{ .Release.Namespace }}"
-        
+        labels="app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/name={{ include "artemis.name" . }}"
         {{- range $key, $value := .Values.jgroups.k8s }}
         {{ $key }}={{ $value | quote }}
         {{- end }}
