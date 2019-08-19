@@ -19,7 +19,8 @@ spec:
     {{- end }}
       labels:
 {{ include "artemis.labels.backup" . | indent 8 }}
-{{ include "artemis.statefulset.spec" . | indent 4 }}
+    spec:
+{{ include "artemis.statefulset.spec" . | indent 6 }}
           {{- if .Values.ha.enabled }}
           - key: broker-ha-backup.xml
             path: broker-00.xml
@@ -31,4 +32,5 @@ spec:
           - key: broker.xml
             path: broker-00.xml
           {{- end }}
+{{ include "artemis.statefulset.volumeclaim" . | indent 2 }}
 {{- end }}
