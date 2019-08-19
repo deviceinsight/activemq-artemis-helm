@@ -59,8 +59,6 @@ clustering:
 ha:
   ## ha.enabled if `true` a second stateful set running backups will be installed 
   enabled: false
-  ## ha.failBack if `true` switch back from backup to live, when live becomes available again
-  failBack: false
   ## ha.live settings for live servers. Key, values are automatically expanded
   live: {}
   ## ha.backup settings for backup servers. Key, values are automatically expanded

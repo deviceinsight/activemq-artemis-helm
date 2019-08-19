@@ -77,9 +77,9 @@ data:
 
   connectors.xml: |
     <connectors xmlns="urn:activemq:core">
-      <connector name="netty">tcp://0.0.0.0:61616</connector>
+      <connector name="netty">tcp://$EXTERNAL_IP:61616</connector>
     </connectors>
-
+  
   clustering.xml: |
     <cluster-connections xmlns="urn:activemq:core">
       <cluster-connection name="{{ include "artemis.fullname" . }}">
@@ -128,7 +128,7 @@ data:
       <org.jgroups.protocols.kubernetes.KUBE_PING
         masterProtocol="https"
         namespace="{{ .Release.Namespace }}"
-        labels="app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/name={{ include "artemis.name" . }}"
+        
         {{- range $key, $value := .Values.jgroups.k8s }}
         {{ $key }}={{ $value | quote }}
         {{- end }}
@@ -200,7 +200,7 @@ data:
     <ha-policy xmlns="urn:activemq:core">
       <replication>
           <master>
-            <check-for-live-server>{{ .Values.ha.failBack }}</check-for-live-server>
+            <check-for-live-server>true</check-for-live-server>
             {{- range $key, $value := (omit .Values.ha.live "check-for-live-server" "checkForLiveServer") }}
             <{{ kebabcase $key }}>{{ $value }}</{{ kebabcase $key }}>
             {{- end }}
@@ -212,7 +212,7 @@ data:
     <ha-policy xmlns="urn:activemq:core">
       <replication>
           <slave>
-            <allow-failback>{{ .Values.ha.failBack }}</allow-failback>
+            <allow-failback>true</allow-failback>
             {{- range $key, $value := (omit .Values.ha.backup "allow-failback" "allowFailback") }}
             <{{ kebabcase $key }}>{{ $value }}</{{ kebabcase $key }}>
             {{- end }}

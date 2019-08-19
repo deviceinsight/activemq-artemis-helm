@@ -25,6 +25,8 @@ spec:
             path: broker-00.xml
           - key: ha-backup.xml
             path: ha-backup.xml
+          - key: connectors.xml
+            path: connectors.xml
           {{- else }}
           - key: broker.xml
             path: broker-00.xml

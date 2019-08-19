@@ -72,6 +72,21 @@ spec:
       mountPath: /tmp/config
     - name: etc-override
       mountPath: /tmp/etc-override
+  - name: set-pod-ip
+    image: bash:5
+    command:
+      - bash
+    args:
+      - -c
+      - sed -i 's/$EXTERNAL_IP/'"$POD_IP"'/' /tmp/etc-override/connectors.xml
+    env:
+    - name: POD_IP
+      valueFrom:
+        fieldRef:
+          fieldPath: status.podIP
+    volumeMounts:
+    - name: etc-override
+      mountPath: /tmp/etc-override
   containers:
   - name: activemq-artemis 
     image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
@@ -107,7 +122,7 @@ spec:
     {{- end }}
     env:
       - name: JAVA_OPTS
-        value: {{ .Values.javaOpts }}    
+        value: "{{ .Values.javaOpts }}"
       - name: ARTEMIS_USERNAME
         value: {{ .Values.auth.clientUser }}
       - name: ARTEMIS_PASSWORD
@@ -117,9 +132,9 @@ spec:
             key: clientPassword
       - name: BROKER_CONFIG_CLUSTER_PASSWORD
         valueFrom:
-          secretKeyRef:
-            name: {{ include "artemis.fullname" . }}
-            key: clusterPassword
+        secretKeyRef:
+           name: {{ include "artemis.fullname" . }}
+           key: clusterPassword
       - name: ENABLE_JMX_EXPORTER
         value: {{ .Values.metrics.enabled | quote }}
     {{- if .Values.containerSecurityContext }}
