@@ -1,0 +1,24 @@
+image: docker-proxy.device-insight.com/library/maven:3-jdk-10
+
+variables:
+  HELM_CHART_REPOSITORY: https://helmcharts.device-insight.com
+  NEXUS_REPOSITORY: http://nexus.device-insight.de/nexus/content/repositories/
+
+mvn_test_job:
+  stage: build
+  script: >
+    mvn clean verify -Dhelm.repository.url=$HELM_CHART_REPOSITORY
+  only:
+    - merge_requests
+  tags:
+    - dind
+
+mvn_deploy_job:
+  stage: build
+  script: >
+    mvn clean verify -Dhelm.repository.url=$HELM_CHART_REPOSITORY -Ddistribtion.repository.url=$NEXUS_REPOSITORY
+  only:
+    - develop
+    - tags
+  tags:
+    - dind
