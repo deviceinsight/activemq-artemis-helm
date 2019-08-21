@@ -1,9 +1,5 @@
 image: docker-proxy.device-insight.com/library/maven:3-jdk-10
 
-variables:
-  HELM_CHART_REPOSITORY: https://helmcharts.device-insight.com
-  NEXUS_REPOSITORY: http://nexus.device-insight.de/nexus/content/repositories/
-
 mvn_test_job:
   stage: build
   script: >
