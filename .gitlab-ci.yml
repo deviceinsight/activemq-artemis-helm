@@ -12,7 +12,7 @@ mvn_test_job:
 mvn_deploy_job:
   stage: build
   script: >
-    mvn clean verify -Dhelm.repository.url=$HELM_CHART_REPOSITORY -Ddistribtion.repository.url=$NEXUS_REPOSITORY
+    mvn clean deploy -Dhelm.repository.url=$HELM_CHART_REPOSITORY -Ddistribtion.repository.url=$NEXUS_REPOSITORY
   only:
     - develop
     - tags
