@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "artemis.fullname" . }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "artemis.labels.live" . | nindent 6 }}
+  serviceName: {{ include "artemis.fullname" . }}
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+    {{- if .Values.metrics.enabled }}
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9404"
+    {{- end }}
+      labels:
+        {{- include "artemis.labels.live" . | nindent 8 }}
+    spec:
+      {{- include "artemis.statefulset.spec" . | nindent 6 }}
+          {{- if .Values.ha.enabled }}
+          {{- if not .Values.persistence.enabled }}
+            {{- fail "When running in high availability ('ha.enabled=true') persistence must be enabled ('persistence.enabled=true'"}}
+          {{- end }}
+          - key: broker-ha-live.xml
+            path: broker-00.xml
+          - key: ha-live.xml
+            path: ha-live.xml
+          {{- else }}
+          - key: broker.xml
+            path: broker-00.xml
+          {{- end }}
+  {{- include "artemis.statefulset.volumeclaim" . | nindent 2 }}
+
+
