@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.2] - 2019-08-23
+### Fixed
+- Fixed indention of cluster secret
+
 ## [0.1.1] - 2019-08-23
 ### Fixed
 - Fixed secret ref, if providing existing secret
