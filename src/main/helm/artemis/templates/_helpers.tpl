@@ -164,7 +164,7 @@ affinity:
 tolerations:
   {{- toYaml . | nindent 2 }}
 {{- end }}
-{{- with .Values.imagePullSecrets }}
+{{- with .Values.image.pullSecrets }}
 imagePullSecrets:
   {{- toYaml . | nindent 2 }}
 {{- end }}
