@@ -142,9 +142,9 @@ containers:
           key: clientPassword
     - name: BROKER_CONFIG_CLUSTER_PASSWORD
       valueFrom:
-      secretKeyRef:
-          name: {{ include "artemis.secretname" . }}
-          key: clusterPassword
+        secretKeyRef:
+            name: {{ include "artemis.secretname" . }}
+            key: clusterPassword
     - name: ENABLE_JMX_EXPORTER
       value: {{ .Values.metrics.enabled | quote }}
   {{- if .Values.containerSecurityContext }}
