@@ -91,7 +91,7 @@ containers:
   image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
   imagePullPolicy: {{ .Values.image.pullPolicy}}
   resources:
-{{ toYaml .Values.resources | indent 6 }}
+    {{- toYaml .Values.resources | nindent 6 }}
   ports:
   - containerPort: 61616
     name: netty
@@ -113,11 +113,11 @@ containers:
   {{- end }}
   readinessProbe:
   {{- if .Values.readinessProbe }}
-{{ toYaml .Values.readinessProbe | indent 10 }}
+    {{- toYaml .Values.readinessProbe | nindent 10 }}
   {{- end }}
   {{- if .Values.livenessProbe }}
   livenessProbe:
-{{ toYaml .Values.livenessProbe | indent 10 }}
+    {{- toYaml .Values.livenessProbe | nindent 10 }}
   {{- end }}
   env:
     - name: JAVA_OPTS
@@ -138,7 +138,7 @@ containers:
       value: {{ .Values.metrics.enabled | quote }}
   {{- if .Values.containerSecurityContext }}
   securityContext:
-{{ toYaml .Values.containerSecurityContext | indent 10 }}
+    {{- toYaml .Values.containerSecurityContext | nindent 10 }}
   {{- end }}
   volumeMounts:
   - name: data
@@ -150,7 +150,23 @@ containers:
 serviceAccount: {{ include "artemis.fullname" . }}
 {{- if .Values.podSecurityContext }}
 securityContext:
-{{ toYaml .Values.podSecurityContext | indent 8 }}
+  {{- toYaml .Values.podSecurityContext | nindent 8 }}
+{{- end }}
+{{- with .Values.nodeSelector }}
+nodeSelector:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- with .Values.affinity }}
+affinity:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- with .Values.tolerations }}
+tolerations:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- with .Values.imagePullSecrets }}
+imagePullSecrets:
+  {{- toYaml . | nindent 2 }}
 {{- end }}
 volumes:
 - name: etc-override

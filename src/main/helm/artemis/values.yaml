@@ -76,9 +76,9 @@ addresses:
 addressSettings:
   - match: "#"
     settings:
-      dead-letter-address: DLQ
-      expiry-address: ExpiryQueue
-      message-counter-history-day-limit: 10
+      deadLetterAddress: DLQ
+      expiryAddress: ExpiryQueue
+      messageCounterHistoryDayLimit: 10
 
 ## podSecurityContext allows setting security context for the pod: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 # podSecurityContext:
