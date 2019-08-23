@@ -21,6 +21,9 @@ spec:
     spec:
 {{ include "artemis.statefulset.spec" . | indent 6 }}
           {{- if .Values.ha.enabled }}
+          {{- if not .Values.persistence.enabled }}
+            {{- fail "When running in high availability ('ha.enabled=true') persistence must be enabled ('persistence.enabled=true'"}}
+          {{- end }}
           - key: broker-ha-live.xml
             path: broker-00.xml
           - key: ha-live.xml
