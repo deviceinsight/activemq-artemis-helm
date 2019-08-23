@@ -25,6 +25,17 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 
 {{/*
+Create a secret name based on the configuration, if it is auto-generated or preexisting
+*/}}
+{{- define "artemis.secretname" -}}
+{{- if .Values.auth.existingSecret -}}
+{{- .Values.auth.existingSecret -}}
+{{- else -}}
+{{- include "artemis.fullname" . }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "artemis.chart" -}}
@@ -91,7 +102,7 @@ containers:
   image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
   imagePullPolicy: {{ .Values.image.pullPolicy}}
   resources:
-    {{- toYaml .Values.resources | nindent 6 }}
+    {{- toYaml .Values.resources | nindent 4 }}
   ports:
   - containerPort: 61616
     name: netty
@@ -113,11 +124,11 @@ containers:
   {{- end }}
   readinessProbe:
   {{- if .Values.readinessProbe }}
-    {{- toYaml .Values.readinessProbe | nindent 10 }}
+    {{- toYaml .Values.readinessProbe | nindent 4 }}
   {{- end }}
   {{- if .Values.livenessProbe }}
   livenessProbe:
-    {{- toYaml .Values.livenessProbe | nindent 10 }}
+    {{- toYaml .Values.livenessProbe | nindent 4 }}
   {{- end }}
   env:
     - name: JAVA_OPTS
@@ -127,12 +138,12 @@ containers:
     - name: ARTEMIS_PASSWORD
       valueFrom:
         secretKeyRef:
-          name: {{ include "artemis.fullname" . }}
+          name: {{ include "artemis.secretname" . }}
           key: clientPassword
     - name: BROKER_CONFIG_CLUSTER_PASSWORD
       valueFrom:
       secretKeyRef:
-          name: {{ include "artemis.fullname" . }}
+          name: {{ include "artemis.secretname" . }}
           key: clusterPassword
     - name: ENABLE_JMX_EXPORTER
       value: {{ .Values.metrics.enabled | quote }}
