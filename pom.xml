@@ -10,6 +10,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <helm-maven-plugin.version>2.1.1</helm-maven-plugin.version>
+        <helm.repository.url>https://kubernetes-charts.storage.googleapis.com</helm.repository.url>
     </properties>
 
     <build>
