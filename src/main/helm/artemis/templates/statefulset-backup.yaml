@@ -10,6 +10,7 @@ spec:
 {{ include "artemis.labels.backup" . | indent 6 }}
   serviceName: {{ include "artemis.fullname" . }}
   replicas: {{ .Values.replicaCount }}
+  podManagementPolicy: Parallel
   template:
     metadata:
     {{- if .Values.metrics.enabled }}
