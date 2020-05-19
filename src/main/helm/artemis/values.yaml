@@ -6,6 +6,11 @@ image:
   pullPolicy: IfNotPresent
   pullSecrets: []
 
+initContainerImage:
+  repository: bash
+  tag: 5
+  pullPolicy: IfNotPresent
+
 resources:
   limits:
     memory: 256Mi
