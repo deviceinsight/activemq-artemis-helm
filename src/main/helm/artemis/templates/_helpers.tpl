@@ -71,7 +71,8 @@ app.kubernetes.io/ha: backup
 {{- define "artemis.statefulset.spec" -}}
 initContainers:
 - name: copy-broker-config
-  image: bash:5
+  image: {{ .Values.initContainerImage.repository }}:{{ .Values.initContainerImage.tag }}
+  imagePullPolicy: {{ .Values.initContainerImage.pullPolicy}}
   command:
     - bash
   args:
@@ -83,7 +84,8 @@ initContainers:
   - name: etc-override
     mountPath: /tmp/etc-override
 - name: set-pod-ip
-  image: bash:5
+  image: {{ .Values.initContainerImage.repository }}:{{ .Values.initContainerImage.tag }}
+  imagePullPolicy: {{ .Values.initContainerImage.pullPolicy}}
   command:
     - bash
   args:
