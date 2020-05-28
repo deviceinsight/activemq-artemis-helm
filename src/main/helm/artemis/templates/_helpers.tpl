@@ -183,7 +183,7 @@ imagePullSecrets:
 {{- end }}
 volumes:
 - name: etc-override
-  empty: {}
+  emptyDir: {}
 - name: jgroups
   configMap:
     name: {{ include "artemis.fullname" . }}
@@ -192,7 +192,7 @@ volumes:
       path: jgroups-discovery.xml
 {{- if not .Values.persistence.enabled }}
 - name: data
-  empty: {}
+  emptyDir: {}
 {{- end }}
 - name: config
   configMap:
