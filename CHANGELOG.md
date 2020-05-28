@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Remove namespaces from roleRef and subjects as the namespace is defined for whole RoleBinding
+- Change 'empty' volume type to 'emptyDir'
 
 ## [0.2.0] - 2020-05-20
 ### Changed
