@@ -24,12 +24,14 @@
                     <chartRepoUrl>${helm.repository.url}</chartRepoUrl>
                     <helmVersion>2.14.3</helmVersion>
                     <skipSnapshots>false</skipSnapshots>
+                    <valuesFile>src/test/helm/artemis/values.yaml</valuesFile>
                 </configuration>
                 <executions>
                     <execution>
                         <goals>
                             <goal>package</goal>
                             <goal>lint</goal>
+                            <goal>template</goal>
                             <goal>deploy</goal>
                         </goals>
                     </execution>

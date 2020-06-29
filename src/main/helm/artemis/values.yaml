@@ -85,6 +85,18 @@ addressSettings:
       expiryAddress: ExpiryQueue
       messageCounterHistoryDayLimit: 10
 
+## users defines the Artemis users and roles required by other applications.
+# users:
+#    johndoe:
+#      user: johndoe
+#      secretName: artemis-secret
+#      secretKey: johndoe
+#      roles:
+#        - amq
+#        - someUserRole
+
+users: {}
+
 ## podSecurityContext allows setting security context for the pod: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 # podSecurityContext:
 ## containerSecurityContext allows setting security context for the container: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
