@@ -20,6 +20,11 @@ spec:
     - port: 1883
       targetPort: mqtt
       name: mqtt
+    {{- if .Values.metrics.enabled }}
+    - port: 9404
+      targetPort: prometheus
+      name: prometheus
+    {{- end }}
 
   selector:
     app.kubernetes.io/name: {{ include "artemis.name" . }}

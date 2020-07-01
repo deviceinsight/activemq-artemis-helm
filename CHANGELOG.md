@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove namespaces from roleRef and subjects as the namespace is defined for whole RoleBinding
 - Change 'empty' volume type to 'emptyDir'
 
+### Changed
+- Expose prometheus service endpoint if `metrics.enabled` is `true`
+
 ## [0.2.0] - 2020-05-20
 ### Changed
 - Add option to configure the init container image
