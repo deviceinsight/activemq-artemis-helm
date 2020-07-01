@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove namespaces from roleRef and subjects as the namespace is defined for whole RoleBinding
 - Change 'empty' volume type to 'emptyDir'
 
+### Changed
+- Expose prometheus service endpoint if `metrics.enabled` is `true`
+
 ### Added
 - Add option to configure artemis users, credentials and roles 
 
