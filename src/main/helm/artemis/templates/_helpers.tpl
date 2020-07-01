@@ -103,12 +103,11 @@ initContainers:
   image: {{ .Values.initContainerImage.repository }}:{{ .Values.initContainerImage.tag }}
   imagePullPolicy: {{ .Values.initContainerImage.pullPolicy}}
   env:
-    {{- $releaseName := .Release.Name }}
     {{- range $user, $properties := .Values.users }}
     - name: ARTEMIS_USER_PW_{{ $user | upper | replace "-" "_" }}
       valueFrom:
         secretKeyRef:
-          name: {{ $releaseName }}-{{ $properties.secretName  }}
+          name: {{ $properties.secretName  }}
           key: {{ $properties.secretKey }}
     {{- end }}
   command:
