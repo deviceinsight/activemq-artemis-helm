@@ -122,9 +122,7 @@ initContainers:
       echo "{{ $role }} = {{ $properties.user }}" >> /tmp/artemis/artemis-roles.properties
       {{- end }}
       {{- end }}
-      echo "Created config files:"
-      cat /tmp/artemis/artemis-users.properties
-      cat /tmp/artemis/artemis-roles.properties
+      echo "Created config files"
       echo "Set config file owner to 1000:1000 (artemis:artemis)..."
       chown -R 1000:1000 /tmp/artemis
       EOF
