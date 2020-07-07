@@ -1,0 +1,35 @@
+language: java
+if: branch = feature/travis-ci
+
+jdk:
+  - oraclejdk11
+
+cache:
+  directories:
+    - $HOME/.m2
+
+before_install:
+  - curl -L https://git.io/get_helm.sh | bash
+  - helm init --client-only
+
+install: /bin/true
+
+script:
+  - ./mvnw verify -B
+  - cp README.md target/helm
+  - cd target/helm
+  - helm repo index .
+  - ls -ltr
+
+deploy:
+  provider: pages
+  github_token: $GITHUB_TOKEN
+  local_dir: target/helm
+  target_branch: gh-pages
+  verbose: true
+  skip_cleanup: true
+  keep_history: true
+  on:
+    branch: master
+
+dist: bionic
