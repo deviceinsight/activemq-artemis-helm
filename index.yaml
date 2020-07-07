@@ -1,0 +1,16 @@
+apiVersion: v1
+entries:
+  artemis:
+  - apiVersion: v1
+    appVersion: 2.9.0
+    created: "2020-07-07T12:28:46.401400699Z"
+    description: A Helm chart installing Apache ActiveMQ Artemis
+    digest: 0248168414f0defdd7ff1b836e513d26c5dac2c29519d802c47278c55b045b14
+    icon: https://raw.githubusercontent.com/apache/activemq-artemis/2.9.0/artemis-website/src/main/resources/images/artemis-logo.png
+    maintainers:
+    - name: Device Insight GmbH
+    name: artemis
+    urls:
+    - artemis-0.3.0.tgz
+    version: 0.3.0
+generated: "2020-07-07T12:28:46.400190035Z"

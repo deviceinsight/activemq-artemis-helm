@@ -1,0 +1,109 @@
+replicaCount: 1
+
+image:
+  repository: vromero/activemq-artemis
+  tag: 2.9.0
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+initContainerImage:
+  repository: bash
+  tag: 5
+  pullPolicy: IfNotPresent
+
+resources:
+  limits:
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
+#javaOpts additional java options
+javaOpts: ""
+
+persistence:
+  enabled: false
+  accessModes:
+    - ReadWriteOnce
+  storageSize: 8Gi
+
+# livenessProbe: 
+  # httpGet:
+  #   port: http
+  # initialDelaySeconds: 120
+  # periodSeconds: 10
+
+readinessProbe:
+  tcpSocket:
+    port: netty
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  
+metrics:
+  ## metrics.enabled if `true` export prometheus metrics
+  enabled: true
+
+auth:
+  clientUser: artemis
+  clusterUser: artemis-internal
+
+jgroups:
+  # jgroups.k8s additional settings for the k8s ping of jgroups. Key, Values are automatically expanded.
+  k8s: {}
+  # jgroups.tcp additional settings for the k8s ping of jgroups. Key, Values are automatically expanded.
+  tcp: {}
+
+## clustering settings, see: https://activemq.apache.org/components/artemis/documentation/latest/clusters.html for reference. 
+## All key-value pairs are automatically expanded in the cluster-connections xml
+clustering:
+  ## clustering.addresses prefix of addresses to include in clustering
+  addresses: []
+  ## clustering.useDuplicateDetection filter out duplicate messages
+  useDuplicateDetection: true
+
+ha:
+  ## ha.enabled if `true` a second stateful set running backups will be installed 
+  enabled: false
+  ## ha.live settings for live servers. Key, values are automatically expanded
+  live: {}
+  ## ha.backup settings for backup servers. Key, values are automatically expanded
+  backup: {}
+
+## core additional core settings. Key, values are automatically expanded
+core:
+  ## core.criticalAnalyzerPolicy how to behave on critical errors detected, see https://activemq.apache.org/components/artemis/documentation/latest/critical-analysis.html
+  criticalAnalyzerPolicy: SHUTDOWN
+
+addresses:
+  - name: DLQ
+  - name: ExpiryQueue
+
+addressSettings:
+  - match: "#"
+    settings:
+      deadLetterAddress: DLQ
+      expiryAddress: ExpiryQueue
+      messageCounterHistoryDayLimit: 10
+
+## users defines the Artemis users and roles required by other applications.
+# users:
+#    johndoe:
+#      user: johndoe
+#      secretName: artemis-secret
+#      secretKey: johndoe
+#      roles:
+#        - amq
+#        - someUserRole
+
+users: {}
+
+## podSecurityContext allows setting security context for the pod: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+# podSecurityContext:
+## containerSecurityContext allows setting security context for the container: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+# containerSecurityContext:
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
