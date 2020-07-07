@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Integration into Travis CI
+- Publish chart on GitHub pages
+
 ### Fixed
 - Remove namespaces from roleRef and subjects as the namespace is defined for whole RoleBinding
 - Change 'empty' volume type to 'emptyDir'
@@ -29,6 +33,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed secret ref, if providing existing secret
 - Fixed indention for resources and readiness check
 
-## [0.1.0] - 2019-08-23 
+## [0.1.0] - 2019-08-23
 ### Added
 - First version of chart with support for clusters and ha with jgroups
