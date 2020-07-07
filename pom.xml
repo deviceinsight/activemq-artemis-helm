@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.deviceinsight</groupId>
     <artifactId>artemis-chart</artifactId>
-    <version>0.3.0</version>
+    <version>0.3.1-SNAPSHOT</version>
     <name>artemis-chart</name>
     <description>helm chart for Apache ActiveMQ Artemis</description>
 
