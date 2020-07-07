@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.deviceinsight</groupId>
     <artifactId>artemis-chart</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
     <name>artemis-chart</name>
     <description>helm chart for Apache ActiveMQ Artemis</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <helm-maven-plugin.version>2.1.1</helm-maven-plugin.version>
+        <helm-maven-plugin.version>2.4.1</helm-maven-plugin.version>
         <helm.repository.url>https://kubernetes-charts.storage.googleapis.com</helm.repository.url>
     </properties>
 
@@ -24,12 +24,14 @@
                     <chartRepoUrl>${helm.repository.url}</chartRepoUrl>
                     <helmVersion>2.14.3</helmVersion>
                     <skipSnapshots>false</skipSnapshots>
+                    <valuesFile>src/test/helm/artemis/values.yaml</valuesFile>
                 </configuration>
                 <executions>
                     <execution>
                         <goals>
                             <goal>package</goal>
                             <goal>lint</goal>
+                            <goal>template</goal>
                             <goal>deploy</goal>
                         </goals>
                     </execution>
@@ -37,17 +39,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <repository>
-            <uniqueVersion>false</uniqueVersion>
-            <id>releases</id>
-            <url>${distribtion.repository.url}/releases</url>
-        </repository>
-        <snapshotRepository>
-            <uniqueVersion>true</uniqueVersion>
-            <id>snapshots</id>
-            <url>${distribtion.repository.url}/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
 </project>

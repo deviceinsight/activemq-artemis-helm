@@ -99,6 +99,36 @@ initContainers:
   volumeMounts:
   - name: etc-override
     mountPath: /tmp/etc-override
+- name: set-users
+  image: {{ .Values.initContainerImage.repository }}:{{ .Values.initContainerImage.tag }}
+  imagePullPolicy: {{ .Values.initContainerImage.pullPolicy}}
+  env:
+    {{- range $user, $properties := .Values.users }}
+    - name: ARTEMIS_USER_PW_{{ $user | upper | replace "-" "_" }}
+      valueFrom:
+        secretKeyRef:
+          name: {{ $properties.secretName  }}
+          key: {{ $properties.secretKey }}
+    {{- end }}
+  command:
+    - sh
+    - "-c"
+    - |
+      bash <<'EOF'
+      touch /tmp/artemis/artemis-users.properties /tmp/artemis/artemis-roles.properties
+      {{- range $user, $properties := .Values.users }}
+      echo "{{ $properties.user }} = $ARTEMIS_USER_PW_{{ $user | upper | replace "-" "_" }}" >> /tmp/artemis/artemis-users.properties
+      {{- range $role := $properties.roles }}
+      echo "{{ $role }} = {{ $properties.user }}" >> /tmp/artemis/artemis-roles.properties
+      {{- end }}
+      {{- end }}
+      echo "Created config files"
+      echo "Set config file owner to 1000:1000 (artemis:artemis)..."
+      chown -R 1000:1000 /tmp/artemis
+      EOF
+  volumeMounts:
+  - name: artemis-users
+    mountPath: /tmp/artemis
 containers:
 - name: activemq-artemis 
   image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
@@ -160,6 +190,12 @@ containers:
     mountPath: /var/lib/artemis/etc-override
   - name: jgroups
     mountPath: /var/lib/artemis/etc/jgroups
+  - name: artemis-users
+    mountPath: /var/lib/artemis/etc/artemis-users.properties
+    subPath: artemis-users.properties
+  - name: artemis-users
+    mountPath: /var/lib/artemis/etc/artemis-roles.properties
+    subPath: artemis-roles.properties
 serviceAccount: {{ include "artemis.fullname" . }}
 {{- if .Values.podSecurityContext }}
 securityContext:
@@ -183,7 +219,9 @@ imagePullSecrets:
 {{- end }}
 volumes:
 - name: etc-override
-  empty: {}
+  emptyDir: {}
+- name: artemis-users
+  emptyDir: {}
 - name: jgroups
   configMap:
     name: {{ include "artemis.fullname" . }}
@@ -192,7 +230,7 @@ volumes:
       path: jgroups-discovery.xml
 {{- if not .Values.persistence.enabled }}
 - name: data
-  empty: {}
+  emptyDir: {}
 {{- end }}
 - name: config
   configMap:
