@@ -20,7 +20,7 @@ script:
   - cd target/helm
   - helm repo index .
   - ls -ltr
-
+# test
 deploy:
   provider: pages
   github_token: $GITHUB_TOKEN
