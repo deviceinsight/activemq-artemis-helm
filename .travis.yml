@@ -1,5 +1,5 @@
 language: java
-if: branch = feature/travis-ci
+if: branch = master
 
 jdk:
   - oraclejdk11
