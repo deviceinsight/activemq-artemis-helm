@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.1] - 2020-07-08
+### Added
+- Include previous releases in chart repository index
+- Run reduced Travis CI build when not on master
+
 ## [0.3.0] - 2020-07-07
 ### Added
 - Integration into Travis CI
@@ -37,7 +42,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - First version of chart with support for clusters and ha with jgroups
 
-[Unreleased]: https://github.com/deviceinsight/activemq-artemis-helm/compare/0.3.0...HEAD
+[Unreleased]: https://github.com/deviceinsight/activemq-artemis-helm/compare/0.3.1...HEAD
+[0.3.1]: https://github.com/deviceinsight/activemq-artemis-helm/compare/0.3.0...0.3.1
 [0.3.0]: https://github.com/deviceinsight/activemq-artemis-helm/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/deviceinsight/activemq-artemis-helm/compare/0.1.2...0.2.0
 [0.1.2]: https://github.com/deviceinsight/activemq-artemis-helm/compare/0.1.1...0.1.2
