@@ -1,5 +1,4 @@
 language: java
-if: branch = master
 
 jdk:
   - oraclejdk11
@@ -16,10 +15,13 @@ install: /bin/true
 
 script:
   - ./mvnw verify -B
-  - cp README.md target/helm
-  - cd target/helm
-  - helm repo index .
-  - ls -ltr
+  - |
+      if [ "$TRAVIS_BRANCH" = "master" ]; then
+        cp README.md target/helm
+        cd target/helm
+        helm repo index .
+        ls -ltr
+      fi
 
 deploy:
   provider: pages
