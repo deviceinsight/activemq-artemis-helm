@@ -3,19 +3,19 @@ entries:
   artemis:
   - apiVersion: v1
     appVersion: 2.9.0
-    created: "2020-07-08T06:43:14.536975744Z"
+    created: "2020-11-20T14:05:19.312021697Z"
     description: A Helm chart installing Apache ActiveMQ Artemis
-    digest: 8e461e21cb5645a36a196d2458252634a762f1e288bbf79e7732acf7ec00a34b
+    digest: 72841ecc099606c1498996afdccd472598fe03dab3860604718d70daf3cb4f97
     icon: https://raw.githubusercontent.com/apache/activemq-artemis/2.9.0/artemis-website/src/main/resources/images/artemis-logo.png
     maintainers:
     - name: Device Insight GmbH
     name: artemis
     urls:
-    - artemis-0.3.1.tgz
-    version: 0.3.1
+    - artemis-0.4.0.tgz
+    version: 0.4.0
   - apiVersion: v1
     appVersion: 2.9.0
-    created: "2020-07-08T06:43:14.536592113Z"
+    created: "2020-11-20T14:05:19.311559104Z"
     description: A Helm chart installing Apache ActiveMQ Artemis
     digest: 68b2b3b66821ec48cb8c5fe3da974aa0404f902e16ee83626961604588ded07b
     icon: https://raw.githubusercontent.com/apache/activemq-artemis/2.9.0/artemis-website/src/main/resources/images/artemis-logo.png
@@ -27,7 +27,7 @@ entries:
     version: 0.3.0
   - apiVersion: v1
     appVersion: 2.9.0
-    created: "2020-07-08T06:43:14.536241936Z"
+    created: "2020-11-20T14:05:19.311074252Z"
     description: A Helm chart installing Apache ActiveMQ Artemis
     digest: 6c50907dba4c03dc85d12575e2f01f5dc7d87ade33a4324508d8756b8729029b
     icon: https://raw.githubusercontent.com/apache/activemq-artemis/2.9.0/artemis-website/src/main/resources/images/artemis-logo.png
@@ -39,7 +39,7 @@ entries:
     version: 0.2.0
   - apiVersion: v1
     appVersion: 2.9.0
-    created: "2020-07-08T06:43:14.535891276Z"
+    created: "2020-11-20T14:05:19.310569425Z"
     description: A Helm chart installing Apache ActiveMQ Artemis
     digest: c83810b81b28f5aba3df7fcdae60ad4118c79c8a34be5b903c060a15dbf5b102
     icon: https://raw.githubusercontent.com/apache/activemq-artemis/2.9.0/artemis-website/src/main/resources/images/artemis-logo.png
@@ -51,7 +51,7 @@ entries:
     version: 0.1.2
   - apiVersion: v1
     appVersion: 2.9.0
-    created: "2020-07-08T06:43:14.535455055Z"
+    created: "2020-11-20T14:05:19.309719252Z"
     description: A Helm chart installing Apache ActiveMQ Artemis
     digest: 5318da1fc59060184c076fd2669100b16488819d07e9f43d10bc83cdc59776f9
     icon: https://raw.githubusercontent.com/apache/activemq-artemis/2.9.0/artemis-website/src/main/resources/images/artemis-logo.png
@@ -63,7 +63,7 @@ entries:
     version: 0.1.1
   - apiVersion: v1
     appVersion: 2.9.0
-    created: "2020-07-08T06:43:14.534613588Z"
+    created: "2020-11-20T14:05:19.308928291Z"
     description: A Helm chart installing Apache ActiveMQ Artemis
     digest: 4ebb14c14b8fcb16684ba9ba97f277c01477cb1e13e0c46695cac718beae9f0d
     icon: https://raw.githubusercontent.com/apache/activemq-artemis/2.9.0/artemis-website/src/main/resources/images/artemis-logo.png
@@ -73,4 +73,4 @@ entries:
     urls:
     - artemis-0.1.0.tgz
     version: 0.1.0
-generated: "2020-07-08T06:43:14.533516371Z"
+generated: "2020-11-20T14:05:19.305166657Z"
