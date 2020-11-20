@@ -177,7 +177,15 @@ data:
         {{- end }}
         </anycast>
       {{- else if eq "topic" .type }}
-        <multicast />  
+        {{- if .queues }}
+        <multicast>
+          {{- range .queues }}
+             <queue name="{{ . }}" />
+          {{- end }}
+        </multicast>
+        {{- else }}
+        <multicast />
+        {{- end }}
       {{- else }}
         {{- fail "invald address type. Can only be 'queue' or 'topic'"}}
       {{- end }}
