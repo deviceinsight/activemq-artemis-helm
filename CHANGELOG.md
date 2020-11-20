@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- git-flow plugin
+
 ### Changed
 - Added possibility to specify queue names for type `topic` (multicast).
 

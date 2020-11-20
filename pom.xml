@@ -11,6 +11,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <helm-maven-plugin.version>2.4.1</helm-maven-plugin.version>
         <helm.repository.url>https://kubernetes-charts.storage.googleapis.com</helm.repository.url>
+        <gitflow-maven-plugin.version>1.15.0</gitflow-maven-plugin.version>
     </properties>
 
     <build>
@@ -36,6 +37,16 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.amashchenko.maven.plugin</groupId>
+                <artifactId>gitflow-maven-plugin</artifactId>
+                <version>${gitflow-maven-plugin.version}</version>
+                <configuration>
+                    <pushRemote>false</pushRemote>
+                    <versionDigitToIncrement>1</versionDigitToIncrement>
+                    <useSnapshotInHotfix>true</useSnapshotInHotfix>
+                </configuration>
             </plugin>
         </plugins>
     </build>
