@@ -17,3 +17,18 @@ users:
     user: testUserNoRoles
     secretName: test-secret
     secretKey: no-roles
+
+addresses:
+  - name: testAnycast
+  - name: testAnycastWQueues
+    queues:
+    - TestQ1A
+    - TestQ1A
+  - name: "testMulticast"
+    type: "topic"
+  - name: "testMulticastQueues"
+    type: "topic"
+    queues:
+    - TestQ1M
+    - TestQ2M
+    - TestQ3M
