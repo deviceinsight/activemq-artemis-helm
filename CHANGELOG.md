@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Added possibility to specify queue names for type `topic` (multicast).
+
 ## [0.3.1] - 2020-07-08
 ### Added
 - Include previous releases in chart repository index
