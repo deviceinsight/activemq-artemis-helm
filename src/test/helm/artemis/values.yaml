@@ -23,7 +23,7 @@ addresses:
   - name: testAnycastWQueues
     queues:
     - TestQ1A
-    - TestQ1A
+    - TestQ2A
   - name: "testMulticast"
     type: "topic"
   - name: "testMulticastQueues"
