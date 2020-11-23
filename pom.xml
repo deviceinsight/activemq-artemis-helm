@@ -11,6 +11,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <helm-maven-plugin.version>2.4.1</helm-maven-plugin.version>
         <helm.repository.url>https://kubernetes-charts.storage.googleapis.com</helm.repository.url>
+        <maven-resource-plugin.version>3.2.0</maven-resource-plugin.version>
         <gitflow-maven-plugin.version>1.15.0</gitflow-maven-plugin.version>
     </properties>
 
@@ -35,6 +36,34 @@
                             <goal>template</goal>
                             <goal>deploy</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven-resource-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/charts</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>target/helm</directory>
+                                    <includes>
+                                        <include>**/*.tgz</include>
+                                    </includes>
+                                    <excludes>
+                                        <exclude>**/*SNAPSHOT.tgz</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

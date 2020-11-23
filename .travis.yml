@@ -17,8 +17,8 @@ script:
   - ./mvnw verify -B
   - |
       if [ "$TRAVIS_BRANCH" = "master" ]; then
-        cp README.md target/helm
-        cd target/helm
+        cp README.md charts
+        cd charts
         helm repo index .
         ls -ltr
       fi
@@ -26,7 +26,7 @@ script:
 deploy:
   provider: pages
   github_token: $GITHUB_TOKEN
-  local_dir: target/helm
+  local_dir: charts
   target_branch: gh-pages
   verbose: true
   skip_cleanup: true
