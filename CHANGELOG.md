@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Add service monitor for prometheus
+- mvn resource plugin to copy chart to folder not cleaned by `mvn clean` to persist old chart versions
 
 ## [0.4.0] - 2020-11-20
 ### Added
