@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2020-11-23
+### Added
+- Add service monitor for prometheus
+- mvn resource plugin to copy chart to folder not cleaned by `mvn clean` to persist old chart versions
+
 ## [0.4.0] - 2020-11-20
 ### Added
 - git-flow plugin
@@ -49,7 +54,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - First version of chart with support for clusters and ha with jgroups
 
-[Unreleased]: https://github.com/deviceinsight/activemq-artemis-helm/compare/0.4.0...HEAD
+[Unreleased]: https://github.com/deviceinsight/activemq-artemis-helm/compare/0.5.0...HEAD
+[0.5.0]: https://github.com/deviceinsight/activemq-artemis-helm/compare/0.4.0...0.5.0
 [0.4.0]: https://github.com/deviceinsight/activemq-artemis-helm/compare/0.3.1...0.4.0
 [0.3.1]: https://github.com/deviceinsight/activemq-artemis-helm/compare/0.3.0...0.3.1
 [0.3.0]: https://github.com/deviceinsight/activemq-artemis-helm/compare/0.2.0...0.3.0

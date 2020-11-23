@@ -32,3 +32,8 @@ addresses:
     - TestQ1M
     - TestQ2M
     - TestQ3M
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
