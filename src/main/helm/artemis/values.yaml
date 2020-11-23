@@ -42,6 +42,15 @@ readinessProbe:
 metrics:
   ## metrics.enabled if `true` export prometheus metrics
   enabled: true
+  serviceMonitor:
+    ## metrics.serviceMonitor.enabled if `true` and metrics.enabled `true` then deploy service monitor
+    enabled: false
+    ## metrics.serviceMonitor.namespace namespace where serviceMonitor is deployed
+    namespace: monitoring
+    ## metrics.serviceMonitor.path Prometheus scraping path
+    path: /metrics
+    ## metrics.serviceMonitor.interval Prometheus scraping interval
+    interval: 10s
 
 auth:
   clientUser: artemis
