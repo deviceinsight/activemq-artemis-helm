@@ -1,0 +1,19 @@
+---
+{{- if and .Values.metrics.serviceMonitor.enabled .Values.metrics.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "artemis.fullname" . }}
+  namespace: {{ .Values.metrics.serviceMonitor.namespace | default "monitoring" }}
+  labels: {{ include "artemis.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels: {{ include "artemis.labels" . | nindent 6 }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  endpoints:
+    - port: prometheus
+      path: {{ .Values.metrics.serviceMonitor.path }}
+      interval: {{ .Values.metrics.serviceMonitor.interval }}
+{{- end }}
