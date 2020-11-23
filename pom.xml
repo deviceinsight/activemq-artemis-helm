@@ -46,7 +46,7 @@
                 <executions>
                     <execution>
                         <id>copy-resources</id>
-                        <phase>verify</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>

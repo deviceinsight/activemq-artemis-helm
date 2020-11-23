@@ -18,7 +18,7 @@ Commit the resulting packaged chart `target/helm/*.tgz`.
 
 ### Releasing
 1) ./mvnw gitflow:release-start
-2) ./mvnw verify
-3) Adapat `CHANGELOG.md`
-3) git add . && git commit
-4) ./mvnw gitflow:release-finish
+2) ./mvnw package
+3) Adapt `CHANGELOG.md`
+4) git add . && git commit
+5) ./mvnw gitflow:release-finish
