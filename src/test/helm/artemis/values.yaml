@@ -3,20 +3,23 @@ users:
     user: testUser1
     secretName: test-secret
     secretKey: test-user
-    roles:
-      - artemisRole1
   artemisTestUser2:
     user: testUser2
     secretName: test-secret
     secretKey: artemis-user
-    roles:
-      - artemisRole1
-      - artemisRole2
-      - amq
   artemisTestUser3:
     user: testUserNoRoles
     secretName: test-secret
     secretKey: no-roles
+
+roleBindings:
+  - role: amq
+    users:
+    - testUser2
+  - role: artemisRole1
+    users:
+    - testUser1
+    - testUser2
 
 addresses:
   - name: testAnycast
