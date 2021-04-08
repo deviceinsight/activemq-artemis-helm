@@ -3,14 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.deviceinsight</groupId>
     <artifactId>artemis-chart</artifactId>
-    <version>0.5.0</version>
+    <version>0.6.0</version>
     <name>artemis-chart</name>
     <description>helm chart for Apache ActiveMQ Artemis</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <helm-maven-plugin.version>2.4.1</helm-maven-plugin.version>
-        <helm.repository.url>https://kubernetes-charts.storage.googleapis.com</helm.repository.url>
+        <helm-maven-plugin.version>2.10.0</helm-maven-plugin.version>
+        <helm-client.version>3.5.2</helm-client.version>
         <maven-resource-plugin.version>3.2.0</maven-resource-plugin.version>
         <gitflow-maven-plugin.version>1.15.0</gitflow-maven-plugin.version>
     </properties>
@@ -23,10 +23,10 @@
                 <version>${helm-maven-plugin.version}</version>
                 <configuration>
                     <chartName>artemis</chartName>
-                    <chartRepoUrl>${helm.repository.url}</chartRepoUrl>
-                    <helmVersion>2.14.3</helmVersion>
+                    <helmVersion>${helm-client.version}</helmVersion>
                     <skipSnapshots>false</skipSnapshots>
                     <valuesFile>src/test/helm/artemis/values.yaml</valuesFile>
+                    <addIncubatorRepo>false</addIncubatorRepo>
                 </configuration>
                 <executions>
                     <execution>
