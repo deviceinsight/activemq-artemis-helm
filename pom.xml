@@ -10,7 +10,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <helm-maven-plugin.version>2.10.0</helm-maven-plugin.version>
-        <helm.repository.url>https://charts.helm.sh/stable</helm.repository.url>
         <helm-client.version>3.5.2</helm-client.version>
         <maven-resource-plugin.version>3.2.0</maven-resource-plugin.version>
         <gitflow-maven-plugin.version>1.15.0</gitflow-maven-plugin.version>
@@ -24,7 +23,6 @@
                 <version>${helm-maven-plugin.version}</version>
                 <configuration>
                     <chartName>artemis</chartName>
-                    <chartRepoUrl>${helm.repository.url}</chartRepoUrl>
                     <helmVersion>${helm-client.version}</helmVersion>
                     <skipSnapshots>false</skipSnapshots>
                     <valuesFile>src/test/helm/artemis/values.yaml</valuesFile>
