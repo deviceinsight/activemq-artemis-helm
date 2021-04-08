@@ -9,8 +9,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <helm-maven-plugin.version>2.4.1</helm-maven-plugin.version>
-        <helm.repository.url>https://kubernetes-charts.storage.googleapis.com</helm.repository.url>
+        <helm-maven-plugin.version>2.10.0</helm-maven-plugin.version>
+        <helm.repository.url>https://charts.helm.sh/stable</helm.repository.url>
+        <helm-client.version>3.5.2</helm-client.version>
         <maven-resource-plugin.version>3.2.0</maven-resource-plugin.version>
         <gitflow-maven-plugin.version>1.15.0</gitflow-maven-plugin.version>
     </properties>
@@ -24,9 +25,10 @@
                 <configuration>
                     <chartName>artemis</chartName>
                     <chartRepoUrl>${helm.repository.url}</chartRepoUrl>
-                    <helmVersion>2.14.3</helmVersion>
+                    <helmVersion>${helm-client.version}</helmVersion>
                     <skipSnapshots>false</skipSnapshots>
                     <valuesFile>src/test/helm/artemis/values.yaml</valuesFile>
+                    <addIncubatorRepo>false</addIncubatorRepo>
                 </configuration>
                 <executions>
                     <execution>
