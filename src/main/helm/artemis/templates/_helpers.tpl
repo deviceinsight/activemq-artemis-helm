@@ -118,9 +118,9 @@ initContainers:
       touch /tmp/artemis/artemis-users.properties /tmp/artemis/artemis-roles.properties
       {{- range $user, $properties := .Values.users }}
       echo "{{ $properties.user }} = $ARTEMIS_USER_PW_{{ $user | upper | replace "-" "_" }}" >> /tmp/artemis/artemis-users.properties
-      {{- range $role := $properties.roles }}
-      echo "{{ $role }} = {{ $properties.user }}" >> /tmp/artemis/artemis-roles.properties
       {{- end }}
+      {{- range $roleBinding := .Values.roleBindings }}
+      echo "{{ $roleBinding.role }} = {{ join "," $roleBinding.users }}" >> /tmp/artemis/artemis-roles.properties
       {{- end }}
       echo "Created config files"
       echo "Set config file owner to 1000:1000 (artemis:artemis)..."
@@ -130,8 +130,8 @@ initContainers:
   - name: artemis-users
     mountPath: /tmp/artemis
 containers:
-- name: activemq-artemis 
-  image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+- name: activemq-artemis
+  image: {{ required "image repository is required" .Values.image.repository }}:{{ required "image tag is required" .Values.image.tag }}
   imagePullPolicy: {{ .Values.image.pullPolicy}}
   resources:
     {{- toYaml .Values.resources | nindent 4 }}

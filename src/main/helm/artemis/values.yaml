@@ -1,8 +1,9 @@
 replicaCount: 1
 
 image:
-  repository: vromero/activemq-artemis
-  tag: 2.9.0
+## repository and image tag are required
+#  repository: some/image
+#  tag: 2.17.0
   pullPolicy: IfNotPresent
   pullSecrets: []
 
@@ -94,15 +95,26 @@ addressSettings:
       expiryAddress: ExpiryQueue
       messageCounterHistoryDayLimit: 10
 
-## users defines the Artemis users and roles required by other applications.
+## users defines the Artemis users required by other applications.
 # users:
 #    johndoe:
 #      user: johndoe
 #      secretName: artemis-secret
 #      secretKey: johndoe
-#      roles:
-#        - amq
-#        - someUserRole
+#    testUser:
+#      user: testUser
+#      secretName: test-secret
+#      secretKey: test
+
+## user-role bindings required by other applications.
+# roleBindings:
+#   - role: amq
+#     users:
+#     - johndoe
+#   - role: artemisRole1
+#     users:
+#     - johndoe
+#     - testUser
 
 users: {}
 
