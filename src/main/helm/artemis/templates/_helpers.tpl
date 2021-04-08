@@ -130,8 +130,8 @@ initContainers:
   - name: artemis-users
     mountPath: /tmp/artemis
 containers:
-- name: activemq-artemis 
-  image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+- name: activemq-artemis
+  image: {{ required "image repository is required" .Values.image.repository }}:{{ required "image tag is required" .Values.image.tag }}
   imagePullPolicy: {{ .Values.image.pullPolicy}}
   resources:
     {{- toYaml .Values.resources | nindent 4 }}

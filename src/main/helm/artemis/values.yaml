@@ -1,6 +1,9 @@
 replicaCount: 1
 
 image:
+## repository and image tag are required
+#  repository: some/image
+#  tag: 2.17.0
   pullPolicy: IfNotPresent
   pullSecrets: []
 
