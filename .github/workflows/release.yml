@@ -34,12 +34,12 @@ jobs:
         run: ./mvnw verify -B
 
       - name: Copy artifacts
-        run: cp -r target/helm/artemis artemis
+        run: mkdir built_charts && cp -r target/helm/artemis built_charts/artemis
 
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.2.1
         with:
-          charts_dir: target/helm
+          charts_dir: built_charts
           charts_repo_url: https://deviceinsight.github.io/activemq-artemis-helm
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
