@@ -16,10 +16,12 @@ helm repo add activemq-artemis https://deviceinsight.github.io/activemq-artemis-
 ```
 
 ## Developer Notes
+When you prepare a new release, make sure to build the chart using ./mvnw verify once the release version has been set. Copy the resulting packaged chart target/helm/*.tgz to charts.
 
 ### Releasing
 1) ./mvnw gitflow:release-start
 2) ./mvnw package
 3) Adapt `CHANGELOG.md`
-4) git add . && git commit
-5) ./mvnw gitflow:release-finish
+4) cp target/helm/*.tgz charts  
+5) git add . && git commit
+6) ./mvnw gitflow:release-finish
