@@ -31,11 +31,11 @@ jobs:
         run: ./mvnw verify -B
 
       - name: Copy readme and build helm index
-#        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master'
         run: cp README.md charts && cd charts && helm repo index .
 
       - name: Deploy
-#        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master'
         uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
           branch: gh-pages
