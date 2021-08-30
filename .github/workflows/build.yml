@@ -1,9 +1,6 @@
-name: Release Charts
+name: Verify & deploy charts
 
-on:
-  push:
-    branches:
-      - feature/add-github-actions
+on: push
 
 jobs:
   release:
@@ -30,16 +27,16 @@ jobs:
         with:
           version: v3.4.0
 
-      - name: Build with Maven
+      - name: Verify with Maven
         run: ./mvnw verify -B
 
-      - name: Copy artifacts
-        run: mkdir built_charts && cp -r target/helm/artemis built_charts/artemis
+      - name: Copy artifacts and build helm index
+#        if: github.ref == 'refs/heads/master'
+        run: cp target/helm/*.tgz charts && cp README.md charts && cd charts && helm repo index .
 
-      - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.2.1
+      - name: Deploy
+#        if: github.ref == 'refs/heads/master'
+        uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
-          charts_dir: built_charts
-          charts_repo_url: https://deviceinsight.github.io/activemq-artemis-helm
-        env:
-          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          branch: gh-pages
+          folder: charts
