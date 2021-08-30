@@ -30,9 +30,9 @@ jobs:
       - name: Verify with Maven
         run: ./mvnw verify -B
 
-      - name: Copy artifacts and build helm index
+      - name: Copy readme and build helm index
 #        if: github.ref == 'refs/heads/master'
-        run: cp target/helm/*.tgz charts && cp README.md charts && cd charts && helm repo index .
+        run: cp README.md charts && cd charts && helm repo index .
 
       - name: Deploy
 #        if: github.ref == 'refs/heads/master'
