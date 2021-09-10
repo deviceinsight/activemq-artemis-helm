@@ -28,7 +28,7 @@ persistence:
     - ReadWriteOnce
   storageSize: 8Gi
 
-# livenessProbe: 
+# livenessProbe:
   # httpGet:
   #   port: http
   # initialDelaySeconds: 120
@@ -63,7 +63,7 @@ jgroups:
   # jgroups.tcp additional settings for the k8s ping of jgroups. Key, Values are automatically expanded.
   tcp: {}
 
-## clustering settings, see: https://activemq.apache.org/components/artemis/documentation/latest/clusters.html for reference. 
+## clustering settings, see: https://activemq.apache.org/components/artemis/documentation/latest/clusters.html for reference.
 ## All key-value pairs are automatically expanded in the cluster-connections xml
 clustering:
   ## clustering.addresses prefix of addresses to include in clustering
@@ -72,7 +72,7 @@ clustering:
   useDuplicateDetection: true
 
 ha:
-  ## ha.enabled if `true` a second stateful set running backups will be installed 
+  ## ha.enabled if `true` a second stateful set running backups will be installed
   enabled: false
   ## ha.live settings for live servers. Key, values are automatically expanded
   live: {}
