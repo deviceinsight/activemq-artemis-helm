@@ -39,7 +39,7 @@ readinessProbe:
     port: netty
   initialDelaySeconds: 5
   periodSeconds: 10
-  
+
 metrics:
   ## metrics.enabled if `true` export prometheus metrics
   enabled: true

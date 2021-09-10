@@ -9,12 +9,12 @@ data:
     <?xml version="1.0" encoding="UTF-8" standalone="no"?>
     <configuration xmlns="urn:activemq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd" xmlns:xi="http://www.w3.org/2001/XInclude">
       <core xmlns="urn:activemq:core" xsi:schemaLocation="urn:activemq:core ">
-        
+
         <xi:include href="../etc-override/connectors.xml"/>
 
         <xi:include href="../etc-override/addresses.xml"/>
         <xi:include href="../etc-override/address-settings.xml" />
-        
+
         <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
         <xi:include href="../etc-override/clustering.xml" />
 
@@ -31,7 +31,7 @@ data:
     <?xml version="1.0" encoding="UTF-8" standalone="no"?>
     <configuration xmlns="urn:activemq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd" xmlns:xi="http://www.w3.org/2001/XInclude">
       <core xmlns="urn:activemq:core" xsi:schemaLocation="urn:activemq:core ">
-        
+
         <xi:include href="../etc-override/connectors.xml"/>
 
         <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
@@ -55,7 +55,7 @@ data:
     <?xml version="1.0" encoding="UTF-8" standalone="no"?>
     <configuration xmlns="urn:activemq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd" xmlns:xi="http://www.w3.org/2001/XInclude">
       <core xmlns="urn:activemq:core" xsi:schemaLocation="urn:activemq:core ">
-        
+
         <xi:include href="../etc-override/connectors.xml"/>
 
         <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
@@ -79,7 +79,7 @@ data:
     <connectors xmlns="urn:activemq:core">
       <connector name="netty">tcp://$EXTERNAL_IP:61616</connector>
     </connectors>
-  
+
   clustering.xml: |
     <cluster-connections xmlns="urn:activemq:core">
       <cluster-connection name="{{ include "artemis.fullname" . }}">
@@ -124,7 +124,7 @@ data:
         {{ $key }}={{ $value | quote }}
         {{- end }}
       />
-    
+
       <org.jgroups.protocols.kubernetes.KUBE_PING
         masterProtocol="https"
         namespace="{{ .Release.Namespace }}"
