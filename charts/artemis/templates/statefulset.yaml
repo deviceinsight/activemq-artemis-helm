@@ -33,5 +33,3 @@ spec:
             path: broker-00.xml
           {{- end }}
   {{- include "artemis.statefulset.volumeclaim" . | nindent 2 }}
-
-

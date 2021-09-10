@@ -19,7 +19,7 @@ resources:
     cpu: 100m
     memory: 256Mi
 
-#javaOpts additional java options
+# javaOpts additional java options
 javaOpts: ""
 
 persistence:
