@@ -16,12 +16,10 @@ helm repo add activemq-artemis https://deviceinsight.github.io/activemq-artemis-
 ```
 
 ## Developer Notes
-When you prepare a new release, make sure to build the chart using ./mvnw verify once the release version has been set. Copy the resulting packaged chart target/helm/*.tgz to charts.
 
 ### Releasing
-1) ./mvnw gitflow:release-start
-2) ./mvnw package
-3) Adapt `CHANGELOG.md`
-4) cp target/helm/*.tgz charts  
-5) git add . && git commit
-6) ./mvnw gitflow:release-finish
+* follow standard gitflow release
+* remove `-SNAPSHOT` from the chart version in charts/artemis/Chart.yaml
+* adapt `CHANGELOG.md`
+* bump up chart version (with `-SNAPSHOT`) for next development cycle
+* after pushing  the master, chart will be automatically pushed to github pages
