@@ -5,4 +5,4 @@ description: A Helm chart installing Apache ActiveMQ Artemis
 version: 0.7.0-SNAPSHOT
 icon: https://raw.githubusercontent.com/apache/activemq-artemis/2.9.0/artemis-website/src/main/resources/images/artemis-logo.png
 maintainers:
-  - name: "Device Insight GmbH"
+  - name: Device Insight GmbH
