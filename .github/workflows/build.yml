@@ -31,9 +31,6 @@ jobs:
       - name: Run chart-testing (lint)
         run: ct lint
 
-      - name: Run chart-testing (install)
-        run: ct install
-
       - name: Run chart-releaser
         if: github.ref == 'refs/heads/master'
         uses: helm/chart-releaser-action@v1.2.1

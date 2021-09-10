@@ -1,0 +1,46 @@
+image:
+  repository: some/image
+  tag: 2.17.0
+
+users:
+  artemisTestUser:
+    user: testUser1
+    secretName: test-secret
+    secretKey: test-user
+  artemisTestUser2:
+    user: testUser2
+    secretName: test-secret
+    secretKey: artemis-user
+  artemisTestUser3:
+    user: testUserNoRoles
+    secretName: test-secret
+    secretKey: no-roles
+
+roleBindings:
+  - role: amq
+    users:
+      - testUser2
+  - role: artemisRole1
+    users:
+      - testUser1
+      - testUser2
+
+addresses:
+  - name: testAnycast
+  - name: testAnycastWQueues
+    queues:
+      - TestQ1A
+      - TestQ2A
+  - name: "testMulticast"
+    type: "topic"
+  - name: "testMulticastQueues"
+    type: "topic"
+    queues:
+      - TestQ1M
+      - TestQ2M
+      - TestQ3M
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
