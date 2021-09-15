@@ -9,12 +9,12 @@ data:
     <?xml version="1.0" encoding="UTF-8" standalone="no"?>
     <configuration xmlns="urn:activemq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd" xmlns:xi="http://www.w3.org/2001/XInclude">
       <core xmlns="urn:activemq:core" xsi:schemaLocation="urn:activemq:core ">
-        
+
         <xi:include href="../etc-override/connectors.xml"/>
 
         <xi:include href="../etc-override/addresses.xml"/>
         <xi:include href="../etc-override/address-settings.xml" />
-        
+
         <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
         <xi:include href="../etc-override/clustering.xml" />
 
@@ -31,7 +31,7 @@ data:
     <?xml version="1.0" encoding="UTF-8" standalone="no"?>
     <configuration xmlns="urn:activemq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd" xmlns:xi="http://www.w3.org/2001/XInclude">
       <core xmlns="urn:activemq:core" xsi:schemaLocation="urn:activemq:core ">
-        
+
         <xi:include href="../etc-override/connectors.xml"/>
 
         <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
@@ -55,7 +55,7 @@ data:
     <?xml version="1.0" encoding="UTF-8" standalone="no"?>
     <configuration xmlns="urn:activemq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd" xmlns:xi="http://www.w3.org/2001/XInclude">
       <core xmlns="urn:activemq:core" xsi:schemaLocation="urn:activemq:core ">
-        
+
         <xi:include href="../etc-override/connectors.xml"/>
 
         <cluster-user>{{ .Values.auth.clusterUser }}</cluster-user>
@@ -79,7 +79,7 @@ data:
     <connectors xmlns="urn:activemq:core">
       <connector name="netty">tcp://$EXTERNAL_IP:61616</connector>
     </connectors>
-  
+
   clustering.xml: |
     <cluster-connections xmlns="urn:activemq:core">
       <cluster-connection name="{{ include "artemis.fullname" . }}">
@@ -124,7 +124,7 @@ data:
         {{ $key }}={{ $value | quote }}
         {{- end }}
       />
-    
+
       <org.jgroups.protocols.kubernetes.KUBE_PING
         masterProtocol="https"
         namespace="{{ .Release.Namespace }}"
@@ -139,19 +139,19 @@ data:
       <FD_ALL timeout="30000" interval="5000"/>
       <VERIFY_SUSPECT timeout="1500"/>
       <BARRIER />
-      <pbcast.NAKACK2 
+      <pbcast.NAKACK2
         xmit_interval="500"
         xmit_table_num_rows="100"
         xmit_table_msgs_per_row="2000"
         xmit_table_max_compaction_time="30000"
         use_mcast_xmit="false"
         discard_delivered_msgs="true" />
-      <UNICAST3 
+      <UNICAST3
         xmit_table_num_rows="100"
         xmit_table_msgs_per_row="1000"
         xmit_table_max_compaction_time="30000"/>
-      <pbcast.STABLE 
-        stability_delay="1000" 
+      <pbcast.STABLE
+        stability_delay="1000"
         desired_avg_gossip="50000"
         max_bytes="8m"/>
       <pbcast.GMS print_local_addr="true" join_timeout="3000"/>

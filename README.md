@@ -1,7 +1,7 @@
 This chart installs [Apache ActiveMQ Artemis](https://activemq.apache.org/components/artemis/)
 
 ## Docker image
-This chart no longer uses [vromero/activemq-artemis](https://github.com/vromero/activemq-artemis-docker) docker image. 
+This chart no longer uses [vromero/activemq-artemis](https://github.com/vromero/activemq-artemis-docker) docker image.
 Please fork [vromero/activemq-artemis](https://github.com/vromero/activemq-artemis-docker) repository and create your own image in order to use this helm chart.
 
 ## Usage
@@ -17,12 +17,9 @@ helm repo add activemq-artemis https://deviceinsight.github.io/activemq-artemis-
 
 ## Developer Notes
 
-When you prepare a new release, make sure to build the chart using `./mvnw verify` once the release version has been set.
-Commit the resulting packaged chart `target/helm/*.tgz`.
-
 ### Releasing
-1) ./mvnw gitflow:release-start
-2) ./mvnw package
-3) Adapt `CHANGELOG.md`
-4) git add . && git commit
-5) ./mvnw gitflow:release-finish
+* follow standard gitflow release
+* remove `-SNAPSHOT` from the chart version in charts/artemis/Chart.yaml
+* adapt `CHANGELOG.md`
+* bump up chart version (with `-SNAPSHOT`) for next development cycle
+* after pushing  the master, chart will be automatically pushed to github pages
