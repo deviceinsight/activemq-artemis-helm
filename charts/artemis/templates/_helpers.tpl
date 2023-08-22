@@ -123,8 +123,8 @@ initContainers:
       echo "{{ $roleBinding.role }} = {{ join "," $roleBinding.users }}" >> /tmp/artemis/artemis-roles.properties
       {{- end }}
       echo "Created config files"
-      echo "Set config file owner to 1000:1000 (artemis:artemis)..."
-      chown -R 1000:1000 /tmp/artemis
+      echo "Set config file owner to 1001:1001 (artemis:artemis)..."
+      chown -R 1001:1001 /tmp/artemis
       EOF
   volumeMounts:
   - name: artemis-users
