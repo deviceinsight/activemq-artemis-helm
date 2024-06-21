@@ -74,7 +74,7 @@ initContainers:
   image: {{ .Values.initContainerImage.repository }}:{{ .Values.initContainerImage.tag }}
   imagePullPolicy: {{ .Values.initContainerImage.pullPolicy}}
   command:
-    - bash
+    - sh
   args:
     - -c
     - cp /tmp/config/*.{xml,xslt} /tmp/etc-override/
@@ -87,7 +87,7 @@ initContainers:
   image: {{ .Values.initContainerImage.repository }}:{{ .Values.initContainerImage.tag }}
   imagePullPolicy: {{ .Values.initContainerImage.pullPolicy}}
   command:
-    - bash
+    - sh
   args:
     - -c
     - sed -i 's/$EXTERNAL_IP/'"$POD_IP"'/' /tmp/etc-override/connectors.xml
@@ -114,7 +114,7 @@ initContainers:
     - sh
     - "-c"
     - |
-      bash <<'EOF'
+      sh <<'EOF'
       touch /tmp/artemis/artemis-users.properties /tmp/artemis/artemis-roles.properties
       {{- range $user, $properties := .Values.users }}
       echo "{{ $properties.user }} = $ARTEMIS_USER_PW_{{ $user | upper | replace "-" "_" }}" >> /tmp/artemis/artemis-users.properties
